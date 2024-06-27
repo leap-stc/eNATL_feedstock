@@ -1,6 +1,8 @@
 """
 ...
 """
+import logging
+import xarray as xr
 import apache_beam as beam
 from pangeo_forge_recipes.patterns import pattern_from_file_sequence
 from pangeo_forge_recipes.transforms import (
@@ -10,6 +12,8 @@ from pangeo_forge_recipes.transforms import (
     StoreToZarr,
     T,
 )
+
+logger = logging.getLogger(__name__)
 
 # Common Parameters
 days = range(1, 32)
@@ -25,11 +29,24 @@ class Preprocess(beam.PTransform):
     @staticmethod
     def _set_coords(item: Indexed[T]) -> Indexed[T]:
         index, ds = item
-        ds = ds.set_coords(['deptht', 'depthw', 'nav_lon', 'nav_lat', 'time_counter', 'tmask'])
+        logger.info(f"Index is {index=}")
+        logger.info(f"Dataset before processing {ds=}")
+        logger.info(f"Time counter data : {ds.time_counter.data}")
+        # could try using cftime to force
+        # create t_new as variable 
+        t_new = xr.DataArray(ds.time_counter.data, dims=['time'])
+        logger.info(f"New Time Dimension {t_new=}")
+        ds = ds.assign_coords(time=t_new)
+        ds = ds.drop(['time_counter'])
+        ds = ds.set_coords(['deptht', 'depthw', 'nav_lon', 'nav_lat', 'tmask'])
+
+        return index, ds
+
+        # ds = ds.set_coords(['deptht', 'depthw', 'nav_lon', 'nav_lat', 'time_counter', 'tmask'])
         # ds = ds.assign_coords(
         #     tmask=ds.coords['tmask'].squeeze(), deptht=ds.coords['deptht'].squeeze()
         # )
-        return index, ds
+
 
     def expand(self, pcoll: beam.PCollection) -> beam.PCollection:
         return pcoll | 'Set coordinates' >> beam.Map(self._set_coords)
@@ -38,7 +55,7 @@ class Preprocess(beam.PTransform):
 eNATL60_BLBT02 = (
     beam.Create(pattern.items())
     | OpenURLWithFSSpec()
-    | OpenWithXarray()
+    | OpenWithXarray(xarray_open_kwargs = {'use_cftime':True})
     | Preprocess()
     | StoreToZarr(
         store_name='eNATL60_BLBT02.zarr',
