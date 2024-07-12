@@ -60,7 +60,7 @@ class Preprocess(beam.PTransform):
 
 eNATL60_BLBT02 = (
     beam.Create(pattern.items())
-    | OpenURLWithFSSpec()
+    | OpenURLWithFSSpec(max_concurrency=4)
     | OpenWithXarray(
         xarray_open_kwargs={"use_cftime": True, "engine": "netcdf4"},
         load=True,
