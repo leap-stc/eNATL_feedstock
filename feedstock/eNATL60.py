@@ -3,7 +3,6 @@ import xarray as xr
 import apache_beam as beam
 from leap_data_management_utils.data_management_transforms import (
     Copy,
-    InjectAttrs,
     get_catalog_store_urls,
 )
 
@@ -75,7 +74,5 @@ eNATL60_BLBT02 = (
     )
     | ConsolidateDimensionCoordinates()
     | ConsolidateMetadata()
-    | Copy(
-        target=catalog_store_urls["enatl60-blbt02"]
-    )
+    | Copy(target=catalog_store_urls["enatl60-blbt02"])
 )
