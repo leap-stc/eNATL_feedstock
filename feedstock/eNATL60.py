@@ -1,5 +1,11 @@
 import xarray as xr
 import apache_beam as beam
+from leap_data_management_utils.data_management_transforms import (
+    Copy,
+    InjectAttrs,
+    get_catalog_store_urls,
+)
+
 from pangeo_forge_recipes.patterns import pattern_from_file_sequence
 from pangeo_forge_recipes.transforms import (
     ConsolidateMetadata,
@@ -8,6 +14,19 @@ from pangeo_forge_recipes.transforms import (
     OpenWithXarray,
     StoreToZarr,
 )
+
+# parse the catalog store locations (this is where the data is copied to after successful write (and maybe testing)
+catalog_store_urls = get_catalog_store_urls("feedstock/catalog.yaml")
+
+# if not run in a github workflow, assume local testing and deactivate the copy stage by setting all urls to False (see https://github.com/leap-stc/leap-data-management-utils/blob/b5762a17cbfc9b5036e1cd78d62c4e6a50c9691a/leap_data_management_utils/data_management_transforms.py#L121-L145)
+if os.getenv("GITHUB_ACTIONS") == "true":
+    print("Running inside GitHub Actions.")
+else:
+    print("Running locally. Deactivating final copy stage.")
+    catalog_store_urls = {k: False for k in catalog_store_urls.keys()}
+
+print("Final output locations")
+print(f"{catalog_store_urls=}")
 
 
 # Common Parameters
@@ -55,4 +74,7 @@ eNATL60_BLBT02 = (
     )
     | ConsolidateDimensionCoordinates()
     | ConsolidateMetadata()
+    | Copy(
+        target=catalog_store_urls["enatl60-blbt02"]
+    )
 )
