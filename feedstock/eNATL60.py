@@ -1,3 +1,4 @@
+import os
 import xarray as xr
 import apache_beam as beam
 from leap_data_management_utils.data_management_transforms import (
