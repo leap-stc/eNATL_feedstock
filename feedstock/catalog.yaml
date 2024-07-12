@@ -4,6 +4,6 @@ tags:
   - zarr
   - ocean
 stores:
-  - id: "eNATL60-BLBT02"
+  - id: "enatl60-blbt02"
     name: "Needs a name"
     url: "gs://leap-scratch/data-library/feedstocks/eNATL_feedstock/eNATL60-BLBT02.zarr"
