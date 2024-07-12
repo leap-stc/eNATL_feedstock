@@ -1,4 +1,4 @@
-pangeo-forge-recipes==0.10.4
+pangeo-forge-recipes==0.10.7
 gcsfs
 apache-beam[gcp]
 leap-data-management-utils==0.0.12
