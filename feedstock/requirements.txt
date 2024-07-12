@@ -2,4 +2,4 @@ pangeo-forge-recipes==0.10.4
 gcsfs
 apache-beam[gcp]
 leap-data-management-utils==0.0.12
-xarray=2024.05.0
+xarray==2024.05.0
