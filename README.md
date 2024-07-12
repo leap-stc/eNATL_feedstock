@@ -1,3 +1,5 @@
+[![pre-commit.ci status](https://results.pre-commit.ci/badge/github/leap-stc/eNATL_feedstock/main.svg)](https://results.pre-commit.ci/latest/github/leap-stc/eNATL_feedstock/main)
+
 # LEAP Template Feedstock
 This repository serves as template/documentation/testing ground for Leap-Pangeo Data Library Feedstocks.
 
