@@ -4,6 +4,8 @@ description: >
 recipes:
   - id: eNATL60_BLBT02
     object: "eNATL60:eNATL60_BLBT02"
+  - id: eNATL60_BLBT02_pyramid
+    object: "pyramid:pyramid"
 provenance:
   providers:
     - name: "Zenodo"
