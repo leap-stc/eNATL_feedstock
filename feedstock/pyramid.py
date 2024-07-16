@@ -1,12 +1,10 @@
 import apache_beam as beam
 import xarray as xr
-import fsspec
 from dataclasses import dataclass
 
 from pangeo_forge_ndpyramid.transforms import StoreToPyramid
 from pangeo_forge_recipes.transforms import OpenWithXarray, ConsolidateMetadata
 from pangeo_forge_recipes.patterns import FileType, pattern_from_file_sequence
-from pangeo_forge_recipes.storage import FSSpecTarget
 
 from leap_data_management_utils.data_management_transforms import (
     Copy,
@@ -24,6 +22,8 @@ catalog_store_urls = get_catalog_store_urls("feedstock/catalog.yaml")
 # lvls = tms.zoom_for_res(111000/4)
 # > 2
 levels = 2
+
+
 
 pattern = pattern_from_file_sequence(
     [
@@ -47,16 +47,11 @@ class Subset(beam.PTransform):
         return pcoll | "subset" >> beam.MapTuple(lambda k, v: (k, self._subset(v)))
 
 
-fs = fsspec.get_filesystem_class("file")()
-target_root = FSSpecTarget(fs, "pyramid_outputs/resample/")
-
-
 pyramid = (
     beam.Create(pattern.items())
     | OpenWithXarray(file_type=FileType("zarr"), xarray_open_kwargs={"chunks": {}})
     | Subset()
     | StoreToPyramid(
-        target_root=target_root,
         store_name="eNATL60_BLBT02_pyramid.zarr",
         epsg_code="4326",
         pyramid_method="resample",
