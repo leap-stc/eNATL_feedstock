@@ -24,7 +24,6 @@ catalog_store_urls = get_catalog_store_urls("feedstock/catalog.yaml")
 levels = 2
 
 
-
 pattern = pattern_from_file_sequence(
     [
         "gs://leap-persistent/data-library/feedstocks/eNATL_feedstock/eNATL60-BLBT02.zarr"
