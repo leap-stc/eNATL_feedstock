@@ -78,7 +78,7 @@ eNATL60_BLBT02 = (
         combine_dims=pattern.combine_dim_keys,
         target_chunks={"x": 2000, "y": 2000, "time": 2},
     )
-    | ConsolidateDimensionCoordinates()
-    | ConsolidateMetadata()
-    | Copy(target=catalog_store_urls["enatl60-blbt02"])
+    # | ConsolidateDimensionCoordinates()
+    # | ConsolidateMetadata()
+    # | Copy(target=catalog_store_urls["enatl60-blbt02"])
 )
