@@ -35,7 +35,7 @@ print(f"{catalog_store_urls=}")
 # Common Parameters
 # days = range(1, 32)
 # reduce for faster testing
-days = range(1,3)
+days = range(1, 3)
 dataset_url = "https://zenodo.org/records/10513552/files"
 
 ## Monthly version
