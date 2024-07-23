@@ -69,7 +69,7 @@ eNATL60_BLBT02 = (
         load=True,
         copy_to_local=True,
     )
-    | Preprocess()
+    # | Preprocess()
     | StoreToZarr(
         store_name="eNATL60_BLBT02.zarr",
         combine_dims=pattern.combine_dim_keys,
