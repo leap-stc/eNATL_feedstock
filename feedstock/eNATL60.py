@@ -51,7 +51,7 @@ eNATL60_BLBT02 = (
     )
     | Preprocess()
     | StoreToZarr(
-        store_name="eNATL60_BLBT02.zarr",
+        store_name="eNATL60_BLBT02_timefix.zarr",
         combine_dims=pattern.combine_dim_keys,
         target_chunks={"x": 2000, "y": 2000, "time": 2},
     )
