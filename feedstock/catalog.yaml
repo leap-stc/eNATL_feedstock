@@ -6,8 +6,8 @@ tags:
   - ocean
 stores:
   - id: "enatl60-blbt02"
-    name: "Needs a name"
+    name: "eNATL60"
     url: "gs://leap-persistent/data-library/feedstocks/eNATL_feedstock/eNATL60-BLBT02.zarr"
   - id: "enatl60-blbt02-pyramid"
-    name: "enatl-pyramid"
+    name: "eNATL60-pyramid"
     url: "gs://leap-persistent/data-library/feedstocks/eNATL_feedstock/eNATL60-BLBT02-pyramid.zarr"
