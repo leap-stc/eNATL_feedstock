@@ -5,7 +5,7 @@ import apache_beam as beam
 from leap_data_management_utils.data_management_transforms import (
     get_catalog_store_urls,
 )
-
+from beam_pyspark_runner.pyspark_runner import PySparkRunner
 from pangeo_forge_recipes.patterns import pattern_from_file_sequence
 from pangeo_forge_recipes.transforms import (
     OpenURLWithFSSpec,
@@ -61,8 +61,16 @@ class Preprocess(beam.PTransform):
         )
 
 
-eNATL60_BLBT02 = (
-    beam.Create(pattern.items())
+# eNATL60_BLBT02 = (
+#     beam.Create(pattern.items())
+
+with beam.Pipeline(runner=PySparkRunner()) as p:
+    (
+        p
+        | beam.Create(pattern.items())
+        | OpenURLWithFSSpec(fsspec_sync_patch=True)
+
+
     | OpenURLWithFSSpec(max_concurrency=1)
     | OpenWithXarray(
         xarray_open_kwargs={"use_cftime": True, "engine": "netcdf4"},
@@ -70,11 +78,11 @@ eNATL60_BLBT02 = (
         copy_to_local=True,
     )
     # | Preprocess()
-    | StoreToZarr(
-        store_name="eNATL60_BLBT02.zarr",
-        combine_dims=pattern.combine_dim_keys,
-        target_chunks={"x": 2000, "y": 2000, "time": 2},
-    )
+    # | StoreToZarr(
+    #     store_name="eNATL60_BLBT02.zarr",
+    #     combine_dims=pattern.combine_dim_keys,
+    #     target_chunks={"x": 2000, "y": 2000, "time": 2},
+    # )
     # | ConsolidateDimensionCoordinates()
     # | ConsolidateMetadata()
     # | Copy(target=catalog_store_urls["enatl60-blbt02"])
