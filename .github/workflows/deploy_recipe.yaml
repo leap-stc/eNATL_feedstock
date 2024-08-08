@@ -42,6 +42,7 @@ jobs:
         # AT that point, screw it, not worth it.
         run: |
           jobname="${{ env.JOB_NAME }}"
+          echo "$JOB_NAME"
           while true; do
             count=$(gcloud dataflow jobs list --status=active --filter="name:${jobname}" --format="value(id)" | wc -l)
             echo "Active Dataflow jobs: $count"
