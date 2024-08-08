@@ -19,5 +19,3 @@ c.TargetStorage.fsspec_class = "gcsfs.GCSFileSystem"
 c.InputCacheStorage.fsspec_class = "gcsfs.GCSFileSystem"
 c.TargetStorage.root_path = f"gs://leap-scratch/data-library/feedstocks/output/{FEEDSTOCK_NAME}/{{job_name}}"
 c.InputCacheStorage.root_path = f"gs://leap-scratch/data-library/feedstocks/cache"
-
-
