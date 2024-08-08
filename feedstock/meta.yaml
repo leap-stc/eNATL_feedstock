@@ -4,7 +4,7 @@ description: >
 recipes:
   - id: eNATL60-BLBT02
     object: "eNATL60:eNATL60_BLBT02"
-  - id: eNATL60-BLBT02-pyramid
+  - id: enatl60-blbt02-pyramid
     object: "pyramid:pyramid"
 provenance:
   providers:
