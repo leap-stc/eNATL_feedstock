@@ -9,6 +9,12 @@ from pangeo_forge_recipes.transforms import (
     StoreToZarr,
 )
 
+from leap_data_management_utils.data_management_transforms import (
+    Copy,
+    get_catalog_store_urls,
+)
+
+catalog_store_urls = get_catalog_store_urls("feedstock/catalog.yaml")
 
 # Common Parameters
 days = range(1, 32)
@@ -30,6 +36,8 @@ class Preprocess(beam.PTransform):
         ds = ds.assign_coords(time=t_new)
         ds = ds.drop(["time_counter"])
         ds = ds.set_coords(["deptht", "depthw", "nav_lon", "nav_lat", "tmask"])
+        # convert cftime.DatetimeGregorian to datetime64[ns]
+        ds["time"] = ds.indexes["time"].to_datetimeindex()
 
         return ds
 
@@ -39,7 +47,7 @@ class Preprocess(beam.PTransform):
         )
 
 
-eNATL60_BLBT02 = (
+eNATL60BLBT02 = (
     beam.Create(pattern.items())
     | OpenURLWithFSSpec()
     | OpenWithXarray(
@@ -49,10 +57,11 @@ eNATL60_BLBT02 = (
     )
     | Preprocess()
     | StoreToZarr(
-        store_name="eNATL60_BLBT02.zarr",
+        store_name="eNATL60-BLBT02.zarr",
         combine_dims=pattern.combine_dim_keys,
         target_chunks={"x": 2000, "y": 2000, "time": 2},
     )
     | ConsolidateDimensionCoordinates()
     | ConsolidateMetadata()
+    | Copy(target=catalog_store_urls["enatl60-blbt02"])
 )
