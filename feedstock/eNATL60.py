@@ -47,7 +47,7 @@ class Preprocess(beam.PTransform):
         )
 
 
-eNATL60_BLBT02 = (
+eNATL60BLBT02 = (
     beam.Create(pattern.items())
     | OpenURLWithFSSpec()
     | OpenWithXarray(
