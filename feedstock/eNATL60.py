@@ -17,7 +17,7 @@ from leap_data_management_utils.data_management_transforms import (
 catalog_store_urls = get_catalog_store_urls("feedstock/catalog.yaml")
 
 # Common Parameters
-days = range(1, 32)
+days = range(1, 5)
 dataset_url = "https://zenodo.org/records/10513552/files"
 
 ## Monthly version
