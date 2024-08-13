@@ -22,7 +22,7 @@ dataset_url = "https://zenodo.org/records/10513552/files"
 
 ## Monthly version
 input_urls = [
-    f"{dataset_url}/eNATL60-BLBT02_y2009m07d{d:02d}.1d_TSWm_60m.nc" for d in days
+    f"{dataset_url}/eNATL60-BLBT02_y2009m07d{d:02d}.1d_TSWm_60m.nc#mode=bytes" for d in days
 ]
 pattern = pattern_from_file_sequence(input_urls, concat_dim="time")
 
@@ -36,8 +36,8 @@ class Preprocess(beam.PTransform):
         ds = ds.assign_coords(time=t_new)
         ds = ds.drop(["time_counter"])
         ds = ds.set_coords(["deptht", "depthw", "nav_lon", "nav_lat", "tmask"])
-        # convert cftime.DatetimeGregorian to datetime64[ns]
-        ds["time"] = ds.indexes["time"].to_datetimeindex()
+        # # convert cftime.DatetimeGregorian to datetime64[ns]
+        # ds["time"] = ds.indexes["time"].to_datetimeindex()
 
         return ds
 
@@ -49,11 +49,13 @@ class Preprocess(beam.PTransform):
 
 eNATL60BLBT02 = (
     beam.Create(pattern.items())
-    | OpenURLWithFSSpec(max_concurrency=1)
+    # | OpenURLWithFSSpec(max_concurrency=1)
     | OpenWithXarray(
-        xarray_open_kwargs={"use_cftime": True, "engine": "netcdf4"},
-        load=True,
-        copy_to_local=True,
+        xarray_open_kwargs={"engine": 'netcdf4'}
+
+        # xarray_open_kwargs={"use_cftime": True, "engine": "netcdf4"},
+        # load=True,
+        # copy_to_local=True,
     )
     | Preprocess()
     | StoreToZarr(
@@ -65,3 +67,4 @@ eNATL60BLBT02 = (
     | ConsolidateMetadata()
     | Copy(target=catalog_store_urls["enatl60-blbt02"])
 )
+
