@@ -11,7 +11,6 @@ from pangeo_forge_recipes.transforms import (
 )
 
 from leap_data_management_utils.data_management_transforms import (
-    Copy,
     get_catalog_store_urls,
 )
 
@@ -51,6 +50,7 @@ def make_full_path(time):
 
 time_concat_dim = ConcatDim("time", dates, nitems_per_file=1)
 pattern = FilePattern(make_full_path, time_concat_dim)
+pattern = pattern.prune(35)
 
 
 class OpenWithPooch(beam.PTransform):
@@ -96,11 +96,11 @@ eNATL60BLBT02 = (
     # copy_to_local=True,)
     | Preprocess()
     | StoreToZarr(
-        store_name="eNATL60-BLBT02.zarr",
+        store_name="eNATL60-BLBT02_test.zarr",
         combine_dims=pattern.combine_dim_keys,
         target_chunks={"time": 30, "y": 900, "x": 900},
     )
     | ConsolidateDimensionCoordinates()
     | ConsolidateMetadata()
-    | Copy(target=catalog_store_urls["enatl60-blbt02"])
+    # | Copy(target=catalog_store_urls["enatl60-blbt02"])
 )
