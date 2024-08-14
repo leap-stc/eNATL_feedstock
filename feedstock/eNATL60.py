@@ -51,7 +51,6 @@ def make_full_path(time):
 
 time_concat_dim = ConcatDim("time", dates, nitems_per_file=1)
 pattern = FilePattern(make_full_path, time_concat_dim)
-pattern = pattern.prune(33)
 
 
 class OpenWithPooch(beam.PTransform):
@@ -70,7 +69,10 @@ class Preprocess(beam.PTransform):
     def _set_coords(ds: xr.Dataset) -> xr.Dataset:
         t_new = xr.DataArray(ds.time_counter.data, dims=["time"])
         ds = ds.assign_coords(time=t_new)
-        ds = ds.drop(["time_counter", "tmask"])
+        to_drop = ["time_counter"]
+        if "tmask" in ds:
+            to_drop += ["tmask"]
+        ds = ds.drop_dims(to_drop)
         ds = ds.set_coords(["deptht", "depthw", "nav_lon", "nav_lat"])
 
         # # convert cftime.DatetimeGregorian to datetime64[ns]
