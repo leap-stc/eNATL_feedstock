@@ -3,12 +3,6 @@ import pandas as pd
 import apache_beam as beam
 import pooch
 from pangeo_forge_recipes.patterns import ConcatDim, FilePattern
-from pangeo_forge_recipes.transforms import (
-    ConsolidateMetadata,
-    ConsolidateDimensionCoordinates,
-    OpenWithXarray,
-    StoreToZarr,
-)
 
 from leap_data_management_utils.data_management_transforms import (
     get_catalog_store_urls,
@@ -89,17 +83,17 @@ eNATL60BLBT02 = (
     beam.Create(pattern.items())
     # | OpenURLWithFSSpec(max_concurrency=1)
     | OpenWithPooch()
-    | OpenWithXarray()
-    # xarray_open_kwargs={"use_cftime": True, "engine": "netcdf4"},
-    # load=True,
-    # copy_to_local=True,)
-    | Preprocess()
-    | StoreToZarr(
-        store_name="eNATL60-BLBT02-shuffle.zarr",
-        combine_dims=pattern.combine_dim_keys,
-        target_chunks={"time": 30, "y": 900, "x": 900},
-    )
-    | ConsolidateDimensionCoordinates()
-    | ConsolidateMetadata()
+    # | OpenWithXarray()
+    # # xarray_open_kwargs={"use_cftime": True, "engine": "netcdf4"},
+    # # load=True,
+    # # copy_to_local=True,)
+    # | Preprocess()
+    # | StoreToZarr(
+    #     store_name="eNATL60-BLBT02-shuffle.zarr",
+    #     combine_dims=pattern.combine_dim_keys,
+    #     target_chunks={"time": 30, "y": 900, "x": 900},
+    # )
+    # | ConsolidateDimensionCoordinates()
+    # | ConsolidateMetadata()
     # | Copy(target=catalog_store_urls["enatl60-blbt02"])
 )
