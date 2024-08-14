@@ -70,7 +70,8 @@ class Preprocess(beam.PTransform):
         t_new = xr.DataArray(ds.time_counter.data, dims=["time"])
         ds = ds.assign_coords(time=t_new)
         ds = ds.drop(["time_counter"])
-        ds = ds.set_coords(["deptht", "depthw", "nav_lon", "nav_lat", "tmask"])
+        ds = ds.set_coords(["deptht", "depthw", "nav_lon", "nav_lat"])
+
         # # convert cftime.DatetimeGregorian to datetime64[ns]
         # ds["time"] = ds.indexes["time"].to_datetimeindex()
 
