@@ -10,7 +10,7 @@ c.DataflowBakery.use_dataflow_prime = False
 c.DataflowBakery.machine_type = "e2-highmem-16"
 c.DataflowBakery.disk_size_gb = 400
 c.DataflowBakery.use_shuffle = False
-c.DataflowBakery.max_workers = 1
+c.DataflowBakery.max_num_workers = 1
 c.DataflowBakery.use_public_ips = True
 c.DataflowBakery.service_account_email = (
     "leap-community-bakery@leap-pangeo.iam.gserviceaccount.com"
