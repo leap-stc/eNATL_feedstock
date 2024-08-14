@@ -1,7 +1,8 @@
 import xarray as xr
+import pandas as pd
 import apache_beam as beam
 import pooch
-from pangeo_forge_recipes.patterns import pattern_from_file_sequence
+from pangeo_forge_recipes.patterns import ConcatDim, FilePattern
 from pangeo_forge_recipes.transforms import (
     ConsolidateMetadata,
     ConsolidateDimensionCoordinates,
@@ -15,22 +16,46 @@ from leap_data_management_utils.data_management_transforms import (
 )
 
 catalog_store_urls = get_catalog_store_urls("feedstock/catalog.yaml")
+dates = pd.date_range("2009-07-01", "2010-06-30", freq="D")
 
-# Common Parameters
-days = range(1, 32)
-dataset_url = "https://zenodo.org/records/10513552/files"
+records = {
+    1: "10261988",
+    2: "10260907",
+    3: "10260980",
+    4: "10261078",
+    5: "10261126",
+    6: "10261192",
+    7: "10261274",
+    8: "10261349",
+    9: "10261461",
+    10: "10261540",
+    11: "10262356",
+    12: "10261643",
+}
 
-## Monthly version
-input_urls = [
-    f"{dataset_url}/eNATL60-BLBT02_y2009m07d{d:02d}.1d_TSWm_60m.nc" for d in days
-]
-pattern = pattern_from_file_sequence(input_urls, concat_dim="time")
+
+def make_full_path(time):
+    record = str(records[time.month])
+    date = (
+        "y"
+        + str(time.year)
+        + "m"
+        + str("{:02d}".format(time.month))
+        + "d"
+        + str("{:02d}".format(time.day))
+    )
+    return (
+        f"https://zenodo.org/records/{record}/files/eNATL60-BLBT02_{date}.1d_TSW_60m.nc"
+    )
+
+
+time_concat_dim = ConcatDim("time", dates, nitems_per_file=1)
+pattern = FilePattern(make_full_path, time_concat_dim)
 
 
 class OpenWithPooch(beam.PTransform):
     @staticmethod
     def _open_pooch(url: str) -> str:
-        # import pdb; pdb.set_trace()
         return pooch.retrieve(url=url, known_hash=None)
 
     def expand(self, pcoll: beam.PCollection) -> beam.PCollection:
@@ -69,7 +94,7 @@ eNATL60BLBT02 = (
     | StoreToZarr(
         store_name="eNATL60-BLBT02.zarr",
         combine_dims=pattern.combine_dim_keys,
-        target_chunks={"x": 2000, "y": 2000, "time": 2},
+        target_chunks={"time": 30, "y": 900, "x": 900},
     )
     | ConsolidateDimensionCoordinates()
     | ConsolidateMetadata()
