@@ -51,6 +51,7 @@ def make_full_path(time):
 
 time_concat_dim = ConcatDim("time", dates, nitems_per_file=1)
 pattern = FilePattern(make_full_path, time_concat_dim)
+pattern = pattern.prune(120)
 
 
 class OpenWithPooch(beam.PTransform):
