@@ -7,6 +7,7 @@ FEEDSTOCK_NAME = repo_path.split('/')[-1]
 c.Bake.prune = False
 c.Bake.bakery_class = "pangeo_forge_runner.bakery.dataflow.DataflowBakery"
 c.DataflowBakery.use_dataflow_prime = False
+c.DataflowBakery.region = 'us-central1-a'
 c.DataflowBakery.machine_type = "z3-highmem-88"
 c.DataflowBakery.disk_size_gb = 400
 c.DataflowBakery.max_workers = 1
