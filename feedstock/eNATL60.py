@@ -3,12 +3,21 @@ import pandas as pd
 import apache_beam as beam
 import pooch
 from pangeo_forge_recipes.patterns import ConcatDim, FilePattern
+from pangeo_forge_recipes.transforms import (
+    ConsolidateMetadata,
+    ConsolidateDimensionCoordinates,
+    OpenWithXarray,
+    StoreToZarr,
+)
 
 from leap_data_management_utils.data_management_transforms import (
+    Copy,
     get_catalog_store_urls,
 )
 
 catalog_store_urls = get_catalog_store_urls("feedstock/catalog.yaml")
+
+
 dates = pd.date_range("2009-07-01", "2010-06-30", freq="D")
 
 records = {
@@ -42,8 +51,9 @@ def make_full_path(time):
     )
 
 
-time_concat_dim = ConcatDim("time", dates, nitems_per_file=1)
+time_concat_dim = ConcatDim("time", dates)
 pattern = FilePattern(make_full_path, time_concat_dim)
+# pattern = pattern.prune(60)
 
 
 class OpenWithPooch(beam.PTransform):
@@ -60,17 +70,11 @@ class Preprocess(beam.PTransform):
 
     @staticmethod
     def _set_coords(ds: xr.Dataset) -> xr.Dataset:
-        t_new = xr.DataArray(ds.time_counter.data, dims=["time"])
-        ds = ds.assign_coords(time=t_new)
-        to_drop = ["time_counter"]
-        if "tmask" in ds:
-            to_drop += ["tmask"]
-        ds = ds.drop_dims(to_drop)
-        ds = ds.set_coords(["deptht", "depthw", "nav_lon", "nav_lat"])
-
-        # # convert cftime.DatetimeGregorian to datetime64[ns]
-        # ds["time"] = ds.indexes["time"].to_datetimeindex()
-
+        ds = ds.rename({"time_counter": "time"})
+        ds = ds.set_coords(("nav_lat", "nav_lon"))
+        ds.attrs["deptht"] = ds.deptht.values[0]
+        ds = ds.drop("deptht")
+        ds = ds[["vosaline", "votemper", "vovecrtz"]]
         return ds
 
     def expand(self, pcoll: beam.PCollection) -> beam.PCollection:
@@ -83,17 +87,17 @@ eNATL60BLBT02 = (
     beam.Create(pattern.items())
     # | OpenURLWithFSSpec(max_concurrency=1)
     | OpenWithPooch()
-    # | OpenWithXarray()
-    # # xarray_open_kwargs={"use_cftime": True, "engine": "netcdf4"},
-    # # load=True,
-    # # copy_to_local=True,)
-    # | Preprocess()
-    # | StoreToZarr(
-    #     store_name="eNATL60-BLBT02-shuffle.zarr",
-    #     combine_dims=pattern.combine_dim_keys,
-    #     target_chunks={"time": 30, "y": 900, "x": 900},
-    # )
-    # | ConsolidateDimensionCoordinates()
-    # | ConsolidateMetadata()
-    # | Copy(target=catalog_store_urls["enatl60-blbt02"])
+    | OpenWithXarray()
+    # xarray_open_kwargs={"use_cftime": True, "engine": "netcdf4"},
+    # load=True,
+    # copy_to_local=True,)
+    | Preprocess()
+    | StoreToZarr(
+        store_name="eNATL60-BLBT02.zarr",
+        combine_dims=pattern.combine_dim_keys,
+        target_chunks={"time": 30, "y": 900, "x": 900},
+    )
+    | ConsolidateDimensionCoordinates()
+    | ConsolidateMetadata()
+    | Copy(target=catalog_store_urls["enatl60-blbt02"])
 )
