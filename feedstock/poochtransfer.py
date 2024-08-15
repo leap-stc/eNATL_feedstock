@@ -3,6 +3,7 @@ import apache_beam as beam
 import pooch
 import subprocess
 import os
+from pangeo_forge_recipes.patterns import pattern_from_file_sequence
 
 # grab from recipes
 import logging
@@ -43,10 +44,14 @@ def make_full_path(time):
 
 
 flist = [make_full_path(time) for time in dates]
+flist = flist[0:2]
+pattern = pattern_from_file_sequence(flist, concat_dim="time")
 
 
 class DownloadAndTransfer(beam.DoFn):
     def process(self, url, bucket):
+        # unpack filepattern tuple
+        url = url[1]
         # grab last bit of filename
         filename = url.split("/")[-1]
 
@@ -69,10 +74,9 @@ class DownloadAndTransfer(beam.DoFn):
         os.remove(local_path)
 
 
-flist = flist[0:2]
 # Define and run the pipeline
 bucket = "leap-scratch/norlandrhagen/pooch"
 
-poochpipeline = beam.Create(flist) | "pooch and s5cmd" >> beam.ParDo(
+poochpipeline = beam.Create(pattern.items()) | "pooch and s5cmd" >> beam.ParDo(
     DownloadAndTransfer(), bucket=bucket
 )
