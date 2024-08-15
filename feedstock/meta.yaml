@@ -4,6 +4,8 @@ description: >
 recipes:
   - id: eNATL60_BLBT02
     object: "eNATL60:eNATL60_BLBT02"
+  - id: pooch-recipe
+    object: "poochtransfer:poochpipeline"
 provenance:
   providers:
     - name: "Zenodo"
