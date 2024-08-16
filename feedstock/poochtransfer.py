@@ -44,7 +44,7 @@ def make_full_path(time):
 
 
 flist = [make_full_path(time) for time in dates]
-flist = flist[0:2]
+# flist = flist[0:2]
 pattern = pattern_from_file_sequence(flist, concat_dim="time")
 
 
