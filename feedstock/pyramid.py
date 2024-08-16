@@ -49,8 +49,8 @@ pyramid = (
     | StoreToPyramid(
         store_name="eNATL60_BLBT02_pyramid.zarr",
         epsg_code="4326",
-        pyramid_method="resample",
-        pyramid_kwargs={"x": "x", "y": "y"},
+        pyramid_method="reproject",
+        # pyramid_kwargs={"x": "x", "y": "y"},
         levels=levels,
         combine_dims=pattern.combine_dim_keys,
     )
