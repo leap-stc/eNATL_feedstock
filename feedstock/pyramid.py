@@ -1,6 +1,4 @@
 import apache_beam as beam
-import xarray as xr
-from dataclasses import dataclass
 
 from pangeo_forge_ndpyramid.transforms import StoreToPyramid
 from pangeo_forge_recipes.transforms import OpenWithXarray, ConsolidateMetadata
@@ -30,24 +28,24 @@ pattern = pattern_from_file_sequence(
 )
 
 
-@dataclass
-class Subset(beam.PTransform):
-    """Custom PTransform to select two days and single variable"""
+# @dataclass
+# class Subset(beam.PTransform):
+#     """Custom PTransform to select two days and single variable"""
 
-    def _subset(self, ds: xr.Dataset) -> xr.Dataset:
-        # ds has a single 'deptht' level. For pyramids we need 3d
-        ds = ds.isel(deptht=0)
+#     def _subset(self, ds: xr.Dataset) -> xr.Dataset:
+#         # ds has a single 'deptht' level. For pyramids we need 3d
+#         ds = ds.isel(deptht=0)
 
-        return ds
+#         return ds
 
-    def expand(self, pcoll):
-        return pcoll | "subset" >> beam.MapTuple(lambda k, v: (k, self._subset(v)))
+#     def expand(self, pcoll):
+#         return pcoll | "subset" >> beam.MapTuple(lambda k, v: (k, self._subset(v)))
 
 
 pyramid = (
     beam.Create(pattern.items())
     | OpenWithXarray(file_type=FileType("zarr"), xarray_open_kwargs={"chunks": {}})
-    | Subset()
+    # | Subset()
     | StoreToPyramid(
         store_name="eNATL60_BLBT02_pyramid.zarr",
         epsg_code="4326",
