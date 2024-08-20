@@ -2,8 +2,10 @@ title: "LEAP Data Library"
 description: >
   eNATL60-TSW-60m is an extraction of a very high resolution oceanic simulation of the North Atlantic performed at MEOM, IGE (FRANCE)
 recipes:
-  - id: eNATL60_BLBT02
+  - id: eNATL60-BLBT02
     object: "eNATL60:eNATL60_BLBT02"
+  - id: enatl60-blbt02-pyramid
+    object: "pyramid:pyramid"
 provenance:
   providers:
     - name: "Zenodo"
@@ -24,3 +26,6 @@ maintainers:
   - name: "Charles Stern"
     orcid: 0000-0002-4078-0852
     github: cisaacstern
+  - name: "Raphael Hagen"
+    orcid: 0000-0003-1994-1153
+    github: norlandrhagen
