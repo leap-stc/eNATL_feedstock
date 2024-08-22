@@ -98,13 +98,13 @@ class OpenXarrayBytes(beam.DoFn):
         gcs = GcsIO()
         with gcs.open(gcs_path) as f:
             file_contents = f.read()
-        
+
         bytes_io = io.BytesIO(file_contents)
         ds = xr.open_dataset(bytes_io)
-        
-        
+
+
 
 with beam.Pipeline() as p:
-    (p 
+    (p
      | beam.Create([gcs files])
      | beam.ParDo(OpenXarrayBytes())    )
