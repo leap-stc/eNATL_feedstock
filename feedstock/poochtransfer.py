@@ -1,9 +1,14 @@
 import pandas as pd
-import apache_beam as beam
 import pooch
 import subprocess
 import os
 from pangeo_forge_recipes.patterns import pattern_from_file_sequence
+
+import apache_beam as beam
+from apache_beam.io.gcp.gcsio import GcsIO
+import xarray as xr
+import io
+
 
 # grab from recipes
 import logging
@@ -66,12 +71,14 @@ class DownloadAndTransfer(beam.DoFn):
             return
 
         local_path = pooch.retrieve(url=url, known_hash=None)
+        gcs_path = f's3://{bucket}/{filename}'
 
-        command = f"s5cmd --endpoint-url https://storage.googleapis.com cp {local_path} 's3://{bucket}/{filename}'"
+        command = f"s5cmd --endpoint-url https://storage.googleapis.com cp {local_path} '{gcs_path}'"
         subprocess.run(command, shell=True, capture_output=True, text=True)
 
         # Clean up the local file
         os.remove(local_path)
+        return gcs_path
 
 
 # Define and run the pipeline
@@ -79,4 +86,25 @@ bucket = "leap-scratch/norlandrhagen/pooch"
 
 poochpipeline = beam.Create(pattern.items()) | "pooch and s5cmd" >> beam.ParDo(
     DownloadAndTransfer(), bucket=bucket
-)
+) | beam.Map(print)
+
+
+
+
+
+
+class OpenXarrayBytes(beam.DoFn):
+    def process(self, gcs_path):
+        gcs = GcsIO()
+        with gcs.open(gcs_path) as f:
+            file_contents = f.read()
+        
+        bytes_io = io.BytesIO(file_contents)
+        ds = xr.open_dataset(bytes_io)
+        
+        
+
+with beam.Pipeline() as p:
+    (p 
+     | beam.Create([gcs files])
+     | beam.ParDo(OpenXarrayBytes())    )
