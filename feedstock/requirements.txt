@@ -1,5 +1,6 @@
-pangeo-forge-recipes==0.10.4
+pangeo-forge-recipes==0.10.7
 gcsfs
-apache-beam[gcp]
+apache-beam[gcp] >= 2.58.0
 leap-data-management-utils==0.0.12
-xarray=2024.05.0
+xarray==2024.05.0
+pooch
