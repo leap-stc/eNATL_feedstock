@@ -5,5 +5,6 @@ tags:
   - ocean
 stores:
   - id: "enatl60-blbt02"
-    name: "Needs a name"
+    name: "eNATL 60M"
+    description: "eNATL60-TSW-60m is an extraction of a very high resolution oceanic simulation of the North Atlantic performed at MEOM, IGE (FRANCE). It contians temperature, salinity and vertical velocity fields at 60m."
     url: "gs://leap-persistent/data-library/feedstocks/eNATL_feedstock/eNATL60-BLBT02.zarr"
