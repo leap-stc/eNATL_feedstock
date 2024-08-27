@@ -11,11 +11,6 @@ provenance:
       roles:
         - host
       url: https://zenodo.org/records/10261274
-    - name: "TBD"
-      description: "TODO"
-      roles:
-        - producer
-        - licensor
   license: "unknown"
 maintainers:
   - name: "Julius Busecke"
@@ -24,3 +19,6 @@ maintainers:
   - name: "Charles Stern"
     orcid: 0000-0002-4078-0852
     github: cisaacstern
+  - name: "Raphael Hagen"
+    orcid: https://orcid.org/0000-0003-1994-1153
+    github: norlandrhagen
