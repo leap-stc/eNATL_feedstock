@@ -3,6 +3,8 @@
 tags:
   - zarr
   - ocean
+  - m2lines
+  - model
 stores:
   - id: "enatl60-blbt02"
     name: "eNATL 60M"
