@@ -4,10 +4,10 @@ import os
 repo_path = os.environ['GITHUB_REPOSITORY']
 FEEDSTOCK_NAME = repo_path.split('/')[-1]
 
-c.Bake.prune = True
+c.Bake.prune = False
 c.Bake.bakery_class = "pangeo_forge_runner.bakery.dataflow.DataflowBakery"
 c.DataflowBakery.use_dataflow_prime = False
-c.DataflowBakery.machine_type = "e2-highmem-8" # 1 year had max 50GB of ram on single worker. This is 64GB
+c.DataflowBakery.machine_type = "t2d-standard-4" 
 c.DataflowBakery.disk_size_gb = 400
 c.DataflowBakery.max_num_workers = 1
 c.DataflowBakery.use_public_ips = True

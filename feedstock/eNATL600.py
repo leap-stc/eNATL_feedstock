@@ -69,5 +69,5 @@ eNATL600BLBT02 = (
     )
     | ConsolidateDimensionCoordinates()
     | ConsolidateMetadata()
-    # | Copy(target=catalog_store_urls["enatl600m-blbt02"])
+    | Copy(target=catalog_store_urls["enatl600m-blbt02"])
 )
