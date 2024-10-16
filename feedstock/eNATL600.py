@@ -4,10 +4,14 @@ import apache_beam as beam
 import pooch
 from pangeo_forge_recipes.patterns import ConcatDim, FilePattern
 from pangeo_forge_recipes.transforms import (
+    ConsolidateMetadata,
+    ConsolidateDimensionCoordinates,
     OpenWithXarray,
+    StoreToZarr,
 )
 
 from leap_data_management_utils.data_management_transforms import (
+    Copy,
     get_catalog_store_urls,
 )
 
@@ -24,7 +28,6 @@ def make_full_path(time):
 
 time_concat_dim = ConcatDim("time", dates)
 pattern = FilePattern(make_full_path, time_concat_dim)
-pattern = pattern.prune(2)
 
 
 class OpenWithPooch(beam.PTransform):
@@ -59,13 +62,12 @@ eNATL600BLBT02 = (
     | OpenWithPooch()
     | OpenWithXarray()
     | Preprocess()
-    | beam.Map(print)
-    # | StoreToZarr(
-    #     store_name="eNATL600m-BLBT02.zarr",
-    #     combine_dims=pattern.combine_dim_keys,
-    #     target_chunks={"time": 100, "y": 400, "x": 800},
-    # )
-    # | ConsolidateDimensionCoordinates()
-    # | ConsolidateMetadata()
+    | StoreToZarr(
+        store_name="eNATL600m-BLBT02.zarr",
+        combine_dims=pattern.combine_dim_keys,
+        target_chunks={"time": 100, "y": 400, "x": 800},
+    )
+    | ConsolidateDimensionCoordinates()
+    | ConsolidateMetadata()
     # | Copy(target=catalog_store_urls["enatl600m-blbt02"])
 )
