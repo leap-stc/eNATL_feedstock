@@ -12,6 +12,7 @@ from pangeo_forge_recipes.transforms import (
 
 from leap_data_management_utils.data_management_transforms import (
     get_catalog_store_urls,
+    Copy,
 )
 
 catalog_store_urls = get_catalog_store_urls("feedstock/catalog.yaml")
