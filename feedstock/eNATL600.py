@@ -61,7 +61,7 @@ class Preprocess(beam.PTransform):
 eNATL600BLBT02 = (
     beam.Create(pattern.items())
     | OpenURLWithFSSpec()
-    | OpenWithXarray(copy_to_local=True)
+    | OpenWithXarray(load=True, copy_to_local=True)
     | Preprocess()
     | StoreToZarr(
         store_name="eNATL600m-BLBT02.zarr",
