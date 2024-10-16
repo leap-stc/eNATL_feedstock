@@ -11,7 +11,6 @@ from pangeo_forge_recipes.transforms import (
 )
 
 from leap_data_management_utils.data_management_transforms import (
-    Copy,
     get_catalog_store_urls,
 )
 
