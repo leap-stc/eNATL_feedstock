@@ -61,7 +61,7 @@ eNATL600BLBT02 = (
     | OpenWithXarray()
     | Preprocess()
     | StoreToZarr(
-        store_name="eNATL600m-BLBT02.zarr",
+        store_name="eNATL600m-BLBT02_TMP.zarr",
         combine_dims=pattern.combine_dim_keys,
         target_chunks={"time": 100, "y": 400, "x": 800},
     )
