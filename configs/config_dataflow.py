@@ -10,7 +10,7 @@ c.DataflowBakery.use_dataflow_prime = False
 c.DataflowBakery.machine_type = "t2d-standard-32"
 c.DataflowBakery.disk_size_gb = 400
 c.DataflowBakery.num_workers = 10
-c.DataflowBakery.max_num_workers = 40
+c.DataflowBakery.max_num_workers = 50
 c.DataflowBakery.use_public_ips = True
 c.DataflowBakery.service_account_email = (
     "leap-community-bakery@leap-pangeo.iam.gserviceaccount.com"
