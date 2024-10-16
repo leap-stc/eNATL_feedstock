@@ -7,6 +7,7 @@ from pangeo_forge_recipes.transforms import (
     ConsolidateMetadata,
     ConsolidateDimensionCoordinates,
     OpenWithXarray,
+    OpenURLWithFSSpec,
     StoreToZarr,
 )
 
@@ -59,8 +60,8 @@ class Preprocess(beam.PTransform):
 
 eNATL600BLBT02 = (
     beam.Create(pattern.items())
-    | OpenWithPooch()
-    | OpenWithXarray()
+    | OpenURLWithFSSpec()
+    | OpenWithXarray(copy_to_local=True)
     | Preprocess()
     | StoreToZarr(
         store_name="eNATL600m-BLBT02.zarr",
