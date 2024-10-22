@@ -38,7 +38,7 @@ def run(argv=None, save_main_session=True):
                 source_chunks,
                 target_chunks,
                 itemsize=itemsize,
-                max_mem=16 * 2**30,
+                max_mem=32 * 2**30,
             )
             | xbeam.ChunksToZarr(
                 store=output_path, template=template, zarr_chunks=target_chunks
