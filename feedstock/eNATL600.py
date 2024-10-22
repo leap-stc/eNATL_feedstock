@@ -56,7 +56,7 @@ eNATL600BLBT02 = (
     | StoreToZarr(
         store_name="eNATL600m-BLBT02.zarr",
         combine_dims=pattern.combine_dim_keys,
-        target_chunks={"time": 100, "y": 400, "x": 800},
+        target_chunks={"time": 3, "y": 2365, "x": 4177},
     )
     | ConsolidateDimensionCoordinates()
     | ConsolidateMetadata()
