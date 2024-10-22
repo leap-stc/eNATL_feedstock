@@ -27,7 +27,7 @@ def run(argv=None, save_main_session=True):
     source_chunks = {"y": 4729, "x": 8354, "time": 365}
     target_chunks = {"time": 100, "y": 400, "x": 800}
 
-    itemsize = 8
+    itemsize = 12
 
     with beam.Pipeline(options=pipeline_options) as p:
         (
@@ -38,7 +38,6 @@ def run(argv=None, save_main_session=True):
                 source_chunks,
                 target_chunks,
                 itemsize=itemsize,
-                max_mem=200000000.0,
             )
             | xbeam.ChunksToZarr(
                 store=output_path, template=template, zarr_chunks=target_chunks
