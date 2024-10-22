@@ -10,8 +10,8 @@ c.DataflowBakery.use_dataflow_prime = False
 c.DataflowBakery.machine_type = "n1-highmem-96"
 c.DataflowBakery.disk_size_gb = 50
 # c.DataflowBakery.autoscaling_algorithm = "NONE"
-c.DataflowBakery.num_workers = 2
-c.DataflowBakery.max_num_workers = 10
+c.DataflowBakery.num_workers = 10
+c.DataflowBakery.max_num_workers = 20
 
 c.DataflowBakery.use_public_ips = True
 c.DataflowBakery.service_account_email = (
