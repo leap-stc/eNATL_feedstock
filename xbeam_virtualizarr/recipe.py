@@ -25,8 +25,8 @@ def run(argv=None, save_main_session=True):
     source_dataset = xr.open_dataset(reference_path, engine="kerchunk", chunks=None)
     template = xbeam.make_template(source_dataset)
     source_chunks = {"y": 4729, "x": 8354, "time": 365}
-    target_chunks = {"time": 100, "y": 400, "x": 800}
-
+    # target_chunks = {"time": 100, "y": 400, "x": 800}
+    target_chunks = {"time": 3, "y": 2365, "x": 4177}
     itemsize = 4  # for float32
 
     with beam.Pipeline(options=pipeline_options) as p:
