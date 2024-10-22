@@ -1,4 +1,4 @@
-name: Deploy Recipes to Google Dataflow
+name: Deploy xarray-beam pipeline
 
 env:
   JOB_NAME: ${{ github.event.inputs.recipe_id }}-${{ github.run_id }}-${{ github.run_attempt }}
