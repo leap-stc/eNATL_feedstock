@@ -27,7 +27,7 @@ def run(argv=None, save_main_session=True):
     source_chunks = {"y": 4729, "x": 8354, "time": 365}
     target_chunks = {"time": 100, "y": 400, "x": 800}
 
-    itemsize = 12
+    itemsize = 1
 
     with beam.Pipeline(options=pipeline_options) as p:
         (
