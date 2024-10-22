@@ -11,7 +11,6 @@ from pangeo_forge_recipes.transforms import (
 
 from leap_data_management_utils.data_management_transforms import (
     get_catalog_store_urls,
-    Copy,
 )
 
 catalog_store_urls = get_catalog_store_urls("feedstock/catalog.yaml")
@@ -60,5 +59,5 @@ eNATL600BLBT02 = (
     )
     | ConsolidateDimensionCoordinates()
     | ConsolidateMetadata()
-    | Copy(target=catalog_store_urls["enatl600m-blbt02"])
+    # | Copy(target=catalog_store_urls["enatl600m-blbt02"])
 )
