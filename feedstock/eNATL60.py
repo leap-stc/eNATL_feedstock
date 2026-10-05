@@ -1,18 +1,17 @@
-import xarray as xr
-import pandas as pd
 import apache_beam as beam
+import pandas as pd
 import pooch
-from pangeo_forge_recipes.patterns import ConcatDim, FilePattern
-from pangeo_forge_recipes.transforms import (
-    ConsolidateMetadata,
-    ConsolidateDimensionCoordinates,
-    OpenWithXarray,
-    StoreToZarr,
-)
-
+import xarray as xr
 from leap_data_management_utils.data_management_transforms import (
     Copy,
     get_catalog_store_urls,
+)
+from pangeo_forge_recipes.patterns import ConcatDim, FilePattern
+from pangeo_forge_recipes.transforms import (
+    ConsolidateDimensionCoordinates,
+    ConsolidateMetadata,
+    OpenWithXarray,
+    StoreToZarr,
 )
 
 catalog_store_urls = get_catalog_store_urls("feedstock/catalog.yaml")
@@ -42,9 +41,9 @@ def make_full_path(time):
         "y"
         + str(time.year)
         + "m"
-        + str("{:02d}".format(time.month))
+        + str(f"{time.month:02d}")
         + "d"
-        + str("{:02d}".format(time.day))
+        + str(f"{time.day:02d}")
     )
     return (
         f"https://zenodo.org/records/{record}/files/eNATL60-BLBT02_{date}.1d_TSW_60m.nc"

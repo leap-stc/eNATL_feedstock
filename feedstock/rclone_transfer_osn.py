@@ -1,8 +1,9 @@
 # slow boat method for transfer from THREDDS to OSN
 # We could parallelize this method with beam / dask
 
-import pandas as pd
 import subprocess
+
+import pandas as pd
 from tqdm import tqdm
 
 dates = pd.date_range("2009-07-01", "2010-06-30", freq="D")

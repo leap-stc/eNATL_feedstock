@@ -2,12 +2,10 @@ import argparse
 
 
 def run(argv=None, save_main_session=True):
-    import xarray as xr
     import apache_beam as beam
+    import xarray as xr
     import xarray_beam as xbeam
-
-    from apache_beam.options.pipeline_options import PipelineOptions
-    from apache_beam.options.pipeline_options import SetupOptions
+    from apache_beam.options.pipeline_options import PipelineOptions, SetupOptions
 
     """Main entry point; defines and runs the wordcount pipeline."""
     parser = argparse.ArgumentParser()
