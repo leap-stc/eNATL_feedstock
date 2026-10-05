@@ -1,11 +1,10 @@
 # pip install fastparquet kerchunk dask distributed pandas xarray git+https://github.com/zarr-developers/VirtualiZarr netcdf4
 
-import xarray as xr
-from virtualizarr import open_virtual_dataset
 import dask
-from dask.distributed import Client
 import pandas as pd
-
+import xarray as xr
+from dask.distributed import Client
+from virtualizarr import open_virtual_dataset
 
 client = Client(n_workers=16)
 client
